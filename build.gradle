@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0'
+    implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+    implementation 'org.glassfish:jakarta.el:4.0.2'
+}
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+shadowJar {
+    archiveClassifier.set('all') // Добавляет суффикс "-all" к имени JAR-файла
+    mergeServiceFiles()
+    manifest {
+        attributes(
+                'Main-Class': 'org.example.Main',
+                'Implementation-Title': project.name,
+                'Implementation-Version': project.version
+        )
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
